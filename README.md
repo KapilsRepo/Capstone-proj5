@@ -1,3 +1,9 @@
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/KapilsRepo/Capstone-proj5/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/KapilsRepo/Capstone-proj5/tree/main)
+
+.. image:: https://dl.circleci.com/status-badge/img/gh/KapilsRepo/Capstone-proj5/tree/main.svg?style=svg
+        :target: https://dl.circleci.com/status-badge/redirect/gh/KapilsRepo/Capstone-proj5/tree/main
+        
+
 ## Project Overview
 
 ## Step 1: Propose and Scope the Project

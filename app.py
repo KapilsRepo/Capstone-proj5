@@ -7,7 +7,7 @@ LOG = create_logger(app)
 LOG.setLevel(logging.INFO)
 
 LOG.info(f"Entered the Process ")
-AddLinterror ####
+
 @app.route('/')
 def home():
     LOG.info(f"Entered the Home Function ")
