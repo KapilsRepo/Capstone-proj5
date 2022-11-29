@@ -62,10 +62,10 @@ jobs:
       - run:
           name: Build and push Docker image
           command: |
-            docker build -t capstone .
-            echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker tag capstone amitgoel2k/capstone:latest
-            docker push amitgoel2k/capstone:latest
+            docker build -t kapmydock23/capstone .
+            docker image ls
+            docker login -u kapmydock23 -p docker123
+            docker push kapmydock23/capstone
  
   create-eks-cluster:
     working_directory: ~/apps
