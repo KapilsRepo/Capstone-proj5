@@ -11,7 +11,6 @@ LOG.info(f"Entered the Process ")
 @app.route('/')
 def home():
     LOG.info(f"Entered the Home Function ")
-    html = f"<h2>Udacity Capstone! Thanks for your review!!!</h2>"
     html = f"<h3>Hello World, my name is Kapil Gandhi</h3>"
     return html.format(format)
 
