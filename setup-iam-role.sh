@@ -3,7 +3,7 @@
 EKS_ROLE_NAME=$1
 EKS_PROFILE_NAME=udacity-eks
 CFN_STACK_NAME=eksctl-udacity-cluster
-EKS_ADMIN_USER=udacity-eks-admin-user
+EKS_ADMIN_USER=udacap
 AWS_REGION=us-east-1
 
 aws cloudformation deploy \
