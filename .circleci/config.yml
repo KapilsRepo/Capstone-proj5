@@ -108,10 +108,10 @@ workflows:
        - aws-eks/create-cluster:
             cluster-name: udacitycapstone
             requires: 
-              - Docker-image-build-and-push
+              - Build-Docker-image-and-push
        - create-deployment:
             cluster-name: udacitycapstone
             requires:
               - build
-              - Docker-image-build-and-push
+              - Build-Docker-image-and-push
               - aws-eks/create-cluster
