@@ -27,29 +27,29 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
+            python3 -m venv dockerproj5
+            . dockerproj5/bin/activate
             make install
             # Install hadolint
             wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
             chmod +x /bin/hadolint
       - save_cache:
           paths:
-            - ./venv
+            - ./dockerproj5
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
     # run lint!
       - run:
           name: run lint
           command: |
-            . venv/bin/activate
+            . dockerproj5/bin/activate
             make lint 
 
     # run test!
       - run:
           name: run test
           command: |
-            . venv/bin/activate
+            . dockerproj5/bin/activate
             py.test 
 
   Docker-image-build-and-push:
@@ -59,7 +59,7 @@ jobs:
       - run:
           name: Docker Image - Build
           command: |
-            docker build --tag=myudacitycapstone1 .
+            docker build --tag=udacitycapstone .
       - run:
           name: Docker Image - List
           command: |
@@ -67,10 +67,12 @@ jobs:
       - run:
           name: Authenticate Docker Hub Login and also push the docker image to docker hub repository
           command: |
-            echo $my_dockerhubrepo_pwd | docker login -u kapmydock23 -p docker123
-            echo 'Logged into docker account'
-            TAG=myudacitycapstone1
-            dockerpath=kapmydock23/myudacitycapstone1
+            docker login -u kapmydock23 -p docker123
+            echo 'Welcome to DockerHub!!!'
+
+            TAG=udacitycapstone
+            dockerpath=kapmydock23/udacitycapstone
+
             docker tag $TAG $dockerpath
             docker push $dockerpath
             echo 'Docker Image pushed to Docker hub : $dockerpath'
@@ -81,7 +83,7 @@ jobs:
     parameters:
       cluster-name:
         description: |
-          myudacitycapstone1
+          udacitycapstone
         type: string
     steps:
       - checkout
@@ -90,8 +92,8 @@ jobs:
           cluster-name: << parameters.cluster-name >>
           install-kubectl: true
       - kubernetes/create-or-update-resource:
-          resource-file-path: .circleci/files/release.yml
-          resource-name: deployment/myudacitycapstone1
+          resource-file-path: .circleci/files/resourcesetup.yml
+          resource-name: deployment/udacitycapstone
           get-rollout-status: true
       - kubernetes/create-or-update-resource:
           resource-file-path: ".circleci/files/networksetup.yml"
@@ -104,11 +106,11 @@ workflows:
             requires: 
               - build
        - aws-eks/create-cluster:
-            cluster-name: myudacitycapstone1
+            cluster-name: udacitycapstone
             requires: 
               - Docker-image-build-and-push
        - create-deployment:
-            cluster-name: myudacitycapstone1
+            cluster-name: udacitycapstone
             requires:
               - build
               - Docker-image-build-and-push

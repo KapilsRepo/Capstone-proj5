@@ -1,36 +1,45 @@
-
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Shubhi87/UdacityCapstone/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/Shubhi87/UdacityCapstone/tree/master)
-
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/Shubhi87/UdacityCapstone/tree/master.svg?style=shield)](https://dl.circleci.com/status-badge/redirect/gh/Shubhi87/UdacityCapstone/tree/master)
-
 ## Project Overview
 
-In this project, I have applied the skills which I have acquired in the complete course- Cloud Devops Nanodegree.
+## Step 1: Propose and Scope the Project
 
-I have used here circle ci orb for creating kubernetes cluster and running and deploying the app.The app is just a simple Hello World Python flask app. Linting and testing is added to check for errors in the format of files as well as testing the basic routing.
-- Continuous integration- circle ci 
-- Deployment Type - Rolling deployment
-- Application - Hello world build by docker , deployed by AWS Kubernetes
+## 1.1 How the Pipeline will look like ?
 
-
-## References
-https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html
-https://docs.aws.amazon.com/eks/latest/userguide/sample-deployment.html
-https://circleci.com/developer/orbs/orb/circleci/aws-eks#usage-create-k8s-deployment
-https://circleci.com/developer/orbs/orb/circleci/aws-eks
-https://github.com/CircleCI-Public/circleci-demo-aws-eks
-  
-## Circle CI Pipeline
 The Circle CI Pipeline workflow will have four basic steps
 * Build : This will build the environment and install all dependencies. Also LInting and testing will be done in it.
-* Docker -Build : Docker is build for the application and the docker image is then pushed to [Docker hub repository] (https://hub.docker.com/repository/docker/shubhi87/myudacitycapstone1)
+* Docker -Build : Docker is build for the application and the docker image is then pushed to [Docker hub repository] ()
 * aws-eks/create-cluster : AWS Kubernetes Cluster is created.
 * create-deployment : Rolling deployment is used to roll out the application to Production
 
+## 1.2 Deployment strategy
+
+We would use the concept learned as part of the course and would utilise them 
+
+- Continuous integration- circle ci 
+- Connectivity to the Git respository
+- Deployment Type - Rolling deployment
+- Application - Hello world build by docker , deployed by AWS Kubernetes
+
+## Step 2: Build your own Kubernetes cluster.
+
+- Use Ansible or CloudFormation to build your “infrastructure”; i.e., the Kubernetes Cluster.
+- Set up new EC2 instances
+
+## Step 3 Build your pipeline
+
+- Git hub pipeline (supply - url to the git hub)
+- circleci screen shots (supply - circleci screenshots)
+- Docker and Makefile
+- Failed and Successful linting
+
+## Step 4 Test your pipeline
+- screen shots of the newly created instances
+- verify pipeline
+
+
 ## Important Links
-* Docker hub Repo : https://hub.docker.com/repository/docker/shubhi87/myudacitycapstone1
-* Github Repo: https://github.com/Shubhi87/UdacityCapstone
-* Load Balancer Link: http://a280d6538b64e46829d69e3c8c502f68-927335322.us-east-1.elb.amazonaws.com/
+* Docker hub Repo : 
+* Github Repo: 
+* Load Balancer Link: 
 
 ### Files:
 *	Makefile - This is a basic file which is used to consolidate commands to be run like set up environment, install dependencies, runs tests and run lints.
@@ -39,4 +48,11 @@ The Circle CI Pipeline workflow will have four basic steps
 *	app.py - Hello World python flask application
 *	app-test.py - To test the Hello World python application 
 *	networksetup.yml - This is to setup the load balancer configuration
-*	release.yml - This is to do the steps for rolling deployment of appliaction in production
+*	resourcesetup.yml - This is to do the steps for rolling deployment of appliaction in production
+
+## References
+https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html
+https://docs.aws.amazon.com/eks/latest/userguide/sample-deployment.html
+https://circleci.com/developer/orbs/orb/circleci/aws-eks#usage-create-k8s-deployment
+https://circleci.com/developer/orbs/orb/circleci/aws-eks
+https://github.com/CircleCI-Public/circleci-demo-aws-eks
