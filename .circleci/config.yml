@@ -102,7 +102,7 @@ workflows:
   default:
     jobs:
        - build
-       - Docker-image-build-and-push:
+       - Build-Docker-image-and-push:
             requires: 
               - build
        - aws-eks/create-cluster:
