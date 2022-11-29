@@ -1,0 +1,19 @@
+# This file is inspired from Amazon AWS user guide which uses Load Balancing on Kubernetes to deply application 
+# Rolling DEployment ise used which updates the previous version of application when running.
+# https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html
+# The load balancer used here is Network Load balancing so that application could be available and accessible by anywhere.
+apiVersion: v1
+kind: Service
+metadata:
+  name: capstone-service
+  namespace: default
+  labels:
+    app: myudacitycapstone1
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: myudacitycapstone1

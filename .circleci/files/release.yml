@@ -1,0 +1,33 @@
+# This file is inspired from Amazon AWS user guide which uses Load Balancing on Kubernetes to deply application 
+# Rolling DEployment ise used which updates the previous version of application when running.
+# https://docs.aws.amazon.com/eks/latest/userguide/network-load-balancing.html
+# The load balancer used here is Network Load balancing so that application could be available and accessible by anywhere.
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myudacitycapstone1
+  namespace: default
+  labels:
+    app: myudacitycapstone1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myudacitycapstone1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: myudacitycapstone1
+    spec:
+      containers:
+        - image: kapmydock23/myudacitycapstone1
+          imagePullPolicy: Always
+          name: capstone
+          ports:
+            - containerPort: 80
