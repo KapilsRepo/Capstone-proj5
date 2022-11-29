@@ -52,7 +52,7 @@ jobs:
             . dockerproj5/bin/activate
             py.test 
 
-  Docker-image-build-and-push:
+  Build-Docker-image-and-push:
     machine: true
     steps:
       - checkout
