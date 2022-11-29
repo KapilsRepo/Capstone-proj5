@@ -5,4 +5,4 @@ def test_app():
     response = app.test_client().get('/')
 
     assert response.status_code == 200
-    assert response.data == b"<h2>Udacity Capstone! Final Submission - Kapil Gandhi</h2>"
+    assert response.data == b"<h3>Hello World, my name is Kapil Gandhi</h3>"
