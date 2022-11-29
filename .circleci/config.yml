@@ -105,10 +105,15 @@ workflows:
        - Build-Docker-image-and-push:
             requires: 
               - build
+       - aws-eks/delete-cluster:
+            cluster-name: udacitycapstone
+            requires:
+              - Build-Docker-image-and-push              
        - aws-eks/create-cluster:
             cluster-name: udacitycapstone
             requires: 
               - Build-Docker-image-and-push
+              - aws-eks/delete-cluster
        - create-deployment:
             cluster-name: udacitycapstone
             requires:
