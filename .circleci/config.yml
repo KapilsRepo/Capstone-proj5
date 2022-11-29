@@ -1,0 +1,159 @@
+version: 2
+
+
+jobs:
+
+  setup-env-and-install-dependencies:
+    working_directory: ~/apps
+    docker:
+      - image: 'python:3.7.3-stretch'
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-      
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make install
+            # Install hadolint
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+                chmod +x /bin/hadolint
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+  lint:
+    working_directory: ~/apps
+    docker:
+      - image: 'python:3.7.3-stretch'
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-         
+      - run:
+          name: Lint python and dockerfile
+          command: |
+            . venv/bin/activate
+            make lint_python
+            make lint_docker           
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }} 
+
+
+  build-docker-image:
+    working_directory: ~/apps
+    docker:
+      - image: docker:20.10.21-git
+    steps:
+      - setup_remote_docker:
+          version: 20.10.18
+      - checkout
+      - run:
+          name: Build and push Docker image
+          command: |
+            docker build -t capstone .
+            echo $DOCKERHUB_PASS | docker login -u $DOCKERHUB_USERNAME --password-stdin
+            docker tag capstone amitgoel2k/capstone:latest
+            docker push amitgoel2k/capstone:latest
+ 
+  create-eks-cluster:
+    working_directory: ~/apps
+    docker:
+      - image: 'weaveworks/eksctl:latest'
+    steps:
+      - checkout 
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-         
+      - run:
+          name: Create EKS Cluster
+          command: |        
+            CLUSTER=$(eksctl get cluster |grep uda-capstone|awk '{print $1}')
+            echo $CLUSTER
+            if [ "$CLUSTER" = "uda-capstone" ]
+            then
+              echo "Cluster exists"
+            else
+              echo "Creating EKS cluster"
+              eksctl create cluster -f infra/eks-cluster.yaml
+            fi  
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+  setup-iam:
+    working_directory: ~/apps
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-         
+      - run:
+          name: Setup IAM role
+          command: |
+              sh ./setup-iam-role.sh
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+  deploy-application:
+    working_directory: ~/apps
+    docker:
+      - image: bearengineer/awscli-kubectl
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-         
+      - run:
+          name: Deploy Docker Image to EKS Cluster
+          command: |  
+            aws eks --region us-east-1 update-kubeconfig --name uda-capstone
+            NS=$(kubectl get namespace uda-capstone |grep uda-capstone|awk '{print $1}')
+            echo $NS
+            if [ "$NS" = "uda-capstone" ]
+            then
+              echo "Namespace exists"
+            else
+              echo "Creating Namespace"
+              kubectl create namespace uda-capstone
+            fi
+            kubectl apply -f deploy/deployment.yaml
+            
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - setup-env-and-install-dependencies
+      - lint:
+          requires:
+            - setup-env-and-install-dependencies
+      - build-docker-image:
+          requires:
+            - lint
+      - create-eks-cluster
+      - setup-iam
+      - deploy-application:
+          requires: ['build-docker-image' , 'create-eks-cluster']
