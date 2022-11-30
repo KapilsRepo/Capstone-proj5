@@ -8,7 +8,7 @@ metadata:
   name: capstone-service
   namespace: default
   labels:
-    app: udacapstone
+    app: kapilscaps
 spec:
   ports:
     - port: 80
@@ -16,4 +16,4 @@ spec:
       protocol: TCP
   type: LoadBalancer
   selector:
-    app: udacapstone
+    app: kapilscaps

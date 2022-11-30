@@ -59,7 +59,7 @@ jobs:
       - run:
           name: Docker Image - Build
           command: |
-            docker build --tag=udacapstone .
+            docker build --tag=kapilscaps .
       - run:
           name: Docker Image - List
           command: |
@@ -70,8 +70,8 @@ jobs:
             docker login -u kapmydock23 -p docker123
             echo 'Welcome to DockerHub!!!'
 
-            TAG=udacapstone
-            dockerpath=kapmydock23/udacapstone
+            TAG=kapilscaps
+            dockerpath=kapmydock23/kapilscaps
 
             docker tag $TAG $dockerpath
             docker push $dockerpath
@@ -83,7 +83,7 @@ jobs:
     parameters:
       cluster-name:
         description: |
-          udacapstone
+          kapilscaps
         type: string
     steps:
       - checkout
@@ -93,14 +93,26 @@ jobs:
           install-kubectl: true
       - kubernetes/create-or-update-resource:
           resource-file-path: .circleci/files/resourcesetup.yml
-          resource-name: deployment/udacapstone
+          resource-name: deployment/kapilscaps
           get-rollout-status: true
       - kubernetes/create-or-update-resource:
           resource-file-path: ".circleci/files/networksetup.yml"
 
 workflows:
-  default:
-    jobs:   
-       - aws-eks/delete-cluster:
-            cluster-name: udacapstone            
+    default:
+      jobs:
+         - build
+         - Build-Docker-image-and-push:
+              requires: 
+                - build          
+         - aws-eks/create-cluster:
+              cluster-name: kapilscaps
+              requires: 
+                - Build-Docker-image-and-push
+         - create-deployment:
+              cluster-name: kapilscaps
+              requires:
+                - build
+                - Build-Docker-image-and-push
+                - aws-eks/create-cluster           
        
