@@ -100,18 +100,7 @@ jobs:
 
 workflows:
   default:
-    jobs:
-       - build
-       - Build-Docker-image-and-push:
-            requires: 
-              - build          
-       - aws-eks/create-cluster:
-            cluster-name: udacapstone
-            requires: 
-              - Build-Docker-image-and-push
-       - create-deployment:
-            cluster-name: udacapstone
-            requires:
-              - build
-              - Build-Docker-image-and-push
-              - aws-eks/create-cluster
+    jobs:   
+       - aws-eks/delete-cluster:
+            cluster-name: udacapstone            
+       
