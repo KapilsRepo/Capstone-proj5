@@ -1,8 +1,5 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/KapilsRepo/Capstone-proj5/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/KapilsRepo/Capstone-proj5/tree/main)
-
-.. image:: https://dl.circleci.com/status-badge/img/gh/KapilsRepo/Capstone-proj5/tree/main.svg?style=svg
-        :target: https://dl.circleci.com/status-badge/redirect/gh/KapilsRepo/Capstone-proj5/tree/main
-        
+      
 
 ## Project Overview
 
@@ -25,27 +22,32 @@ We would use the concept learned as part of the course and would utilise them
 - Deployment Type - Rolling deployment
 - Application - Hello world build by docker , deployed by AWS Kubernetes
 
-## Step 2: Build your own Kubernetes cluster.
+## Step 2: Use Jenkins or Circle CI, and implement blue/green or rolling deployment.
+
+- If you're using Circle CI, set up your circle CI account and connect your git repository.
+- Set up your environment to which you will deploy code.
+
+## Step 3: Build your own Kubernetes cluster.
 
 - Use Ansible or CloudFormation to build your “infrastructure”; i.e., the Kubernetes Cluster.
 - Set up new EC2 instances
 
-## Step 3 Build your pipeline
+## Step 4 Build your pipeline
 
 - Git hub pipeline (supply - url to the git hub)
 - circleci screen shots (supply - circleci screenshots)
 - Docker and Makefile
 - Failed and Successful linting
 
-## Step 4 Test your pipeline
+## Step 5 Test your pipeline
 - screen shots of the newly created instances
 - verify pipeline
 
 
 ## Important Links
-* Docker hub Repo : 
-* Github Repo: 
-* Load Balancer Link: 
+* Docker hub Repo : https://hub.docker.com/repository/docker/kapmydock23/kapilscaps
+* Github Repo: https://github.com/KapilsRepo/Capstone-proj5
+* Load Balancer Link: https://us-east-2.console.aws.amazon.com/ec2/home?region=us-east-2#LoadBalancers:
 
 ### Files:
 *	Makefile - This is a basic file which is used to consolidate commands to be run like set up environment, install dependencies, runs tests and run lints.
